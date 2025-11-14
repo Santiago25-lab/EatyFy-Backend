@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 // Entity: Represents a user in the app
 @Entity
@@ -13,10 +16,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Unique identifier for the user
 
+    @NotBlank
+    @Size(max = 100)
     private String name;  // User's name
+
+    @NotBlank
+    @Email
     private String email; // User's email
 
-    private String foodPreferences; 
+    @NotBlank
+    private String password; // User's password (hashed)
+
+    private String role = "USER"; // Role: USER or RESTAURANT
+
+    private String foodPreferences;
     // Simple string to store food preferences, can be extended later
 
     // --- Getters and Setters ---
@@ -43,6 +56,22 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getFoodPreferences() {

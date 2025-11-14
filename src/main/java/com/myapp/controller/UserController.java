@@ -3,13 +3,9 @@ package com.myapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import com.myapp.entity.User;
 import com.myapp.service.UserService;
@@ -22,7 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Get all users
+    // Get all users (admin only)
     @GetMapping
     public List<User> getUsers() {
         return userService.getUsers();
@@ -38,6 +34,31 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
+    }
+
+    // Get current user profile
+    @GetMapping("/profile")
+    public ResponseEntity<User> getProfile(Authentication authentication) {
+        String email = authentication.getName();
+        User user = userService.findByEmail(email).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
+    }
+
+    // Update current user profile
+    @PutMapping("/profile")
+    public ResponseEntity<User> updateProfile(@RequestBody User updatedUser, Authentication authentication) {
+        String email = authentication.getName();
+        User user = userService.findByEmail(email).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        user.setName(updatedUser.getName());
+        user.setFoodPreferences(updatedUser.getFoodPreferences());
+        User saved = userService.saveUser(user);
+        return ResponseEntity.ok(saved);
     }
 
     // Delete user by id

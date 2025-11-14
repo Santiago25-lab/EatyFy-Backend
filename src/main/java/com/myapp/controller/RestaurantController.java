@@ -3,16 +3,14 @@ package com.myapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import com.myapp.entity.Restaurant;
+import com.myapp.entity.User;
 import com.myapp.service.RestaurantService;
+import com.myapp.service.UserService;
 
 // Controller for handling Restaurant-related HTTP requests
 @RestController
@@ -22,27 +20,89 @@ public class RestaurantController {
     @Autowired
     private RestaurantService restaurantService;
 
+    @Autowired
+    private UserService userService;
+
     // Get all restaurants
     @GetMapping
-    public List<Restaurant> getRestaurants() {
-        return restaurantService.getRestaurants();
+    public List<Restaurant> getRestaurants(@RequestParam(required = false) String city,
+                                           @RequestParam(required = false) Double budget) {
+        List<Restaurant> restaurants = restaurantService.getRestaurants();
+
+        if (city != null) {
+            restaurants = restaurants.stream()
+                    .filter(r -> r.getAddress().toLowerCase().contains(city.toLowerCase()))
+                    .toList();
+        }
+
+        if (budget != null) {
+            restaurants = restaurants.stream()
+                    .filter(r -> r.getAveragePricePerPerson() != null && r.getAveragePricePerPerson() <= budget)
+                    .toList();
+        }
+
+        return restaurants;
     }
 
-    // Create a new restaurant
+    // Create a new restaurant (for restaurant owners)
     @PostMapping
-    public Restaurant createRestaurant(@RequestBody Restaurant restaurant) {
-        return restaurantService.saveRestaurant(restaurant);
+    public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant, Authentication authentication) {
+        String email = authentication.getName();
+        User user = userService.findByEmail(email).orElse(null);
+        if (user == null || !"RESTAURANT".equals(user.getRole())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        restaurant.setOwner(user);
+        Restaurant saved = restaurantService.saveRestaurant(restaurant);
+        return ResponseEntity.ok(saved);
     }
 
     // Get restaurant by id
     @GetMapping("/{id}")
-    public Restaurant getRestaurantById(@PathVariable Long id) {
-        return restaurantService.getRestaurantById(id);
+    public ResponseEntity<Restaurant> getRestaurantById(@PathVariable Long id) {
+        Restaurant restaurant = restaurantService.getRestaurantById(id);
+        if (restaurant == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(restaurant);
+    }
+
+    // Update restaurant (owner only)
+    @PutMapping("/{id}")
+    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable Long id, @RequestBody Restaurant updatedRestaurant, Authentication authentication) {
+        Restaurant restaurant = restaurantService.getRestaurantById(id);
+        if (restaurant == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String email = authentication.getName();
+        User user = userService.findByEmail(email).orElse(null);
+        if (user == null || !restaurant.getOwner().getId().equals(user.getId())) {
+            return ResponseEntity.status(403).build();
+        }
+
+        updatedRestaurant.setId(id);
+        updatedRestaurant.setOwner(user);
+        Restaurant saved = restaurantService.saveRestaurant(updatedRestaurant);
+        return ResponseEntity.ok(saved);
     }
 
     // Delete restaurant by id
     @DeleteMapping("/{id}")
-    public void deleteRestaurant(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id, Authentication authentication) {
+        Restaurant restaurant = restaurantService.getRestaurantById(id);
+        if (restaurant == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String email = authentication.getName();
+        User user = userService.findByEmail(email).orElse(null);
+        if (user == null || !restaurant.getOwner().getId().equals(user.getId())) {
+            return ResponseEntity.status(403).build();
+        }
+
         restaurantService.deleteRestaurant(id);
+        return ResponseEntity.noContent().build();
     }
 }
