@@ -3,6 +3,7 @@ package com.myapp.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.myapp.entity.Restaurant;
@@ -15,7 +16,8 @@ public class RestaurantService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    // Get all restaurants
+    // Get all restaurants with caching
+    @Cacheable(value = "restaurants", key = "'all'")
     public List<Restaurant> getRestaurants() {
         return restaurantRepository.findAll();
     }
