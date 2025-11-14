@@ -1,0 +1,190 @@
+{
+  "cities": [
+    {
+      "name": "Bogotá",
+      "name_normalized": "bogota",
+      "lat": 4.7110,
+      "lon": -74.0721,
+      "country": "Colombia",
+      "population": 7181000,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Medellín",
+      "name_normalized": "medellin",
+      "lat": 6.2476,
+      "lon": -75.5658,
+      "country": "Colombia",
+      "population": 2529000,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Cali",
+      "name_normalized": "cali",
+      "lat": 3.4372,
+      "lon": -76.5225,
+      "country": "Colombia",
+      "population": 2228000,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Barranquilla",
+      "name_normalized": "barranquilla",
+      "lat": 10.9639,
+      "lon": -74.7964,
+      "country": "Colombia",
+      "population": 1206000,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Cartagena",
+      "name_normalized": "cartagena",
+      "lat": 10.3997,
+      "lon": -75.5144,
+      "country": "Colombia",
+      "population": 914500,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Cúcuta",
+      "name_normalized": "cucuta",
+      "lat": 7.8939,
+      "lon": -72.5078,
+      "country": "Colombia",
+      "population": 750000,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Bucaramanga",
+      "name_normalized": "bucaramanga",
+      "lat": 7.1254,
+      "lon": -73.1198,
+      "country": "Colombia",
+      "population": 581130,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Pereira",
+      "name_normalized": "pereira",
+      "lat": 4.8133,
+      "lon": -75.6961,
+      "country": "Colombia",
+      "population": 467269,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Santa Marta",
+      "name_normalized": "santa marta",
+      "lat": 11.2408,
+      "lon": -74.1990,
+      "country": "Colombia",
+      "population": 499192,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Ibagué",
+      "name_normalized": "ibague",
+      "lat": 4.4389,
+      "lon": -75.2322,
+      "country": "Colombia",
+      "population": 541101,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Pasto",
+      "name_normalized": "pasto",
+      "lat": 1.2136,
+      "lon": -77.2811,
+      "country": "Colombia",
+      "population": 392930,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Manizales",
+      "name_normalized": "manizales",
+      "lat": 5.0689,
+      "lon": -75.5174,
+      "country": "Colombia",
+      "population": 434403,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Neiva",
+      "name_normalized": "neiva",
+      "lat": 2.9273,
+      "lon": -75.2819,
+      "country": "Colombia",
+      "population": 353033,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Villavicencio",
+      "name_normalized": "villavicencio",
+      "lat": 4.1420,
+      "lon": -73.6266,
+      "country": "Colombia",
+      "population": 531275,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Armenia",
+      "name_normalized": "armenia",
+      "lat": 4.5339,
+      "lon": -75.6811,
+      "country": "Colombia",
+      "population": 315328,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Popayán",
+      "name_normalized": "popayan",
+      "lat": 2.4542,
+      "lon": -76.6092,
+      "country": "Colombia",
+      "population": 318059,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Sincelejo",
+      "name_normalized": "sincelejo",
+      "lat": 9.3047,
+      "lon": -75.3978,
+      "country": "Colombia",
+      "population": 286998,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Valledupar",
+      "name_normalized": "valledupar",
+      "lat": 10.4631,
+      "lon": -73.2532,
+      "country": "Colombia",
+      "population": 490076,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Montería",
+      "name_normalized": "monteria",
+      "lat": 8.7478,
+      "lon": -75.8814,
+      "country": "Colombia",
+      "population": 505334,
+      "timezone": "America/Bogota"
+    },
+    {
+      "name": "Tunja",
+      "name_normalized": "tunja",
+      "lat": 5.5353,
+      "lon": -73.3678,
+      "country": "Colombia",
+      "population": 199278,
+      "timezone": "America/Bogota"
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2025-11-14",
+    "source": "OpenStreetMap Nominatim API",
+    "description": "Datos de ciudades colombianas principales con coordenadas GPS para mapas en tiempo real"
+  }
+}
