@@ -32,6 +32,9 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody User user) {
         if (userService.findByEmail(user.getEmail()).isPresent()) {
@@ -40,6 +43,9 @@ public class AuthController {
 
         user.setRole("USER"); // Default role
         User savedUser = userService.saveUser(user);
+
+        // Send confirmation email
+        emailService.sendRegistrationConfirmation(savedUser.getEmail(), savedUser.getName());
 
         String token = jwtUtil.generateToken(savedUser.getEmail());
 

@@ -26,18 +26,25 @@ public class RestaurantController {
     // Get all restaurants
     @GetMapping
     public List<Restaurant> getRestaurants(@RequestParam(required = false) String city,
-                                           @RequestParam(required = false) Double budget) {
+                                           @RequestParam(required = false) Double budget,
+                                           @RequestParam(required = false) String cuisine) {
         List<Restaurant> restaurants = restaurantService.getRestaurants();
 
-        if (city != null) {
+        if (city != null && !city.isEmpty()) {
             restaurants = restaurants.stream()
                     .filter(r -> r.getAddress().toLowerCase().contains(city.toLowerCase()))
                     .toList();
         }
 
-        if (budget != null) {
+        if (budget != null && budget > 0) {
             restaurants = restaurants.stream()
                     .filter(r -> r.getAveragePricePerPerson() != null && r.getAveragePricePerPerson() <= budget)
+                    .toList();
+        }
+
+        if (cuisine != null && !cuisine.isEmpty()) {
+            restaurants = restaurants.stream()
+                    .filter(r -> r.getCuisineType() != null && r.getCuisineType().toLowerCase().contains(cuisine.toLowerCase()))
                     .toList();
         }
 
