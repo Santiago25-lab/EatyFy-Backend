@@ -97,31 +97,42 @@ public class RestaurantController {
         )).toList();
     }
 
-    // Create a new restaurant (for restaurant owners)
+    // Create a new restaurant (for authenticated users)
     @PostMapping
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant, Authentication authentication) {
+        System.out.println("=== CREATE RESTAURANT ENDPOINT CALLED ===");
         String email = authentication.getName();
+        System.out.println("Creating restaurant for user: " + email);
         User user = userService.findByEmail(email).orElse(null);
-        if (user == null || !"RESTAURANT".equals(user.getRole())) {
-            return ResponseEntity.badRequest().build();
+        if (user == null) {
+            System.out.println("User not found: " + email);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        System.out.println("User found: " + user.getId() + " - " + user.getName());
 
         // Get coordinates from address using OpenStreetMap (optional)
         if (restaurant.getAddress() != null && !restaurant.getAddress().trim().isEmpty()) {
             try {
+                System.out.println("Attempting to geocode address: " + restaurant.getAddress());
                 Map<String, Double> coordinates = geocodingService.getCoordinates(restaurant.getAddress() + ", Colombia");
                 if (coordinates != null && coordinates.get("lat") != null && coordinates.get("lon") != null) {
                     restaurant.setLatitude(coordinates.get("lat"));
                     restaurant.setLongitude(coordinates.get("lon"));
+                    System.out.println("Geocoding successful: lat=" + coordinates.get("lat") + ", lon=" + coordinates.get("lon"));
+                } else {
+                    System.out.println("No coordinates found for address: " + restaurant.getAddress());
                 }
             } catch (Exception e) {
                 // Log error but don't fail restaurant creation
                 System.err.println("Error geocoding address: " + restaurant.getAddress() + " - " + e.getMessage());
+                e.printStackTrace();
             }
         }
 
         restaurant.setOwner(user);
+        System.out.println("Saving restaurant: " + restaurant.getName() + " for user: " + user.getId());
         Restaurant saved = restaurantService.saveRestaurant(restaurant);
+        System.out.println("Restaurant saved with ID: " + saved.getId());
         return ResponseEntity.ok(saved);
     }
 
