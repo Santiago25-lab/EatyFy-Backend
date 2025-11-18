@@ -20,7 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private String allowedOrigins = "*";
+    private String allowedOrigins = "https://fronted-eatyfy1-gjov0yt0o-santiagos-projects-4507f69b.vercel.app";
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
